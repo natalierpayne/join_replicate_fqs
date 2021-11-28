@@ -170,19 +170,15 @@ def main():
                         fh.write(fh2 + '\n')
 
                 if args.extract:
-                    if args.dir:
-                        original_file = ''.join(args.dir + '/' + basename)
-                        rep_file = ''.join(args.dir + '/' +
-                                           os.path.basename(rep))
-                    else:
-                        original_file = basename
-                        rep_file = os.path.basename(rep)
+                    original_file = ''.join(args.dir + '/' + basename)
+                    rep_file = ''.join(args.dir + '/' +
+                                       os.path.basename(rep))
                     with open(original_file, 'wt', encoding='utf8') as fh:
                         fh.write(fh1 + '\n')
                     with open(rep_file, 'wt', encoding='utf8') as fh:
                         fh.write(fh2 + '\n')
 
-# gz/actual fq files
+# gz
 # FH.name to save mem?
 # Typing info?
 
