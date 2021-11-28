@@ -9,7 +9,6 @@ import argparse
 import os
 import sys
 import re
-# from Bio import SeqIO
 
 
 # --------------------------------------------------
@@ -59,12 +58,21 @@ def get_args():
                         help='Extract replicate files',
                         action='store_true')
 
+    parser.add_argument('-s',
+                        '--silent',
+                        help='Silence warnings',
+                        action='store_true')
+
     args = parser.parse_args()
+
+    for fh in args.files:
+        if not os.path.isfile(fh):
+            parser.error(f'{fh} does not exist. Please provide valid filename.')
 
     if not args.concatenate:
         if not args.extract:
             parser.error('What would you like me to do? Please use one or both of --concatenate or --extract')
-    
+
     if args.outdir:
         if not args.concatenate:
             parser.error('Please use --concatenate to use the --outdir option')
@@ -72,6 +80,10 @@ def get_args():
     if args.dir:
         if not args.extract:
             parser.error('Please use --extract to use the --dir option')
+
+    if args.extract:
+        if not args.dir:
+            parser.error('Please specify where to copy the extracted files with --dir')
 
     return args
 
@@ -85,7 +97,7 @@ def main():
     if args.outdir:
         if not os.path.isdir(args.outdir):
             os.mkdir(args.outdir)
-        else:
+        elif not args.silent:
             cont = input(f'Warning: The directory "{args.outdir}" already exists! Are you sure you want to continue (y/n)?')
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
@@ -93,8 +105,14 @@ def main():
     if args.dir:
         if not os.path.isdir(args.dir):
             os.mkdir(args.dir)
-        else:
+        elif not args.silent:
             cont = input(f'Warning: The directory "{args.dir}" already exists! Are you sure you want to continue (y/n)?')
+            if cont == 'n':
+                sys.exit('Okay, see you next time!')
+
+    if args.concatenate:
+        if not args.outdir:
+            cont = input('Warning: Are you sure you want to write output to the current directory (y/n)?')
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
 
@@ -105,8 +123,11 @@ def main():
             if re.search(pattern, fh):
                 reps.append(fh)
 
+    if reps == []:
+        sys.exit(f'No replicates were found! Check {args.pattern} is correct.')
+
     rep_sample_names = []
-    
+
     for fh in reps:
         for pattern in args.pattern:
             if pattern in fh:
@@ -117,7 +138,7 @@ def main():
 
     for name in set(rep_sample_names):
         basename = os.path.basename(name)
-        root, ext = os.path.splitext(basename)
+        root, _ext = os.path.splitext(basename)
         filename, direction = os.path.splitext(root)
         for rep in reps:
             if filename and direction in rep:
@@ -149,10 +170,12 @@ def main():
                     with open(rep_file, 'wt', encoding='utf8') as fh:
                         fh.write(fh2 + '\n')
 
-# separate functions?
-# testing?
 # gz/actual fq files
 # push test data/expected outputs
+# Makefile with test and how to run
+# reqs?
+# FH.name to save mem?
+# Typing info?
 
 
 # --------------------------------------------------
