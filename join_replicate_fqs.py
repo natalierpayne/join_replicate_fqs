@@ -110,7 +110,7 @@ def main():
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
 
-    if args.concatenate:
+    if args.concatenate and not args.silent:
         if not args.outdir:
             cont = input('Warning: Are you sure you want to write output to the current directory (y/n)?')
             if cont == 'n':
