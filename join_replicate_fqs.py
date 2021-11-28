@@ -10,6 +10,8 @@ import os
 import sys
 import re
 
+# pylint:disable=too-many-locals,consider-using-with,unspecified-encoding,too-many-branches,too-many-statements
+
 
 # --------------------------------------------------
 def get_args():
@@ -67,15 +69,19 @@ def get_args():
 
     for fh in args.files:
         if not os.path.isfile(fh):
-            parser.error(f'{fh} does not exist. Please provide valid filename.')
+            parser.error(f'{fh} does not exist.' +
+                         ' Please provide valid filename.')
 
     if not args.concatenate:
         if not args.extract:
-            parser.error('What would you like me to do? Please use one or both of --concatenate or --extract')
+            parser.error('What would you like me to do?' +
+                         ' Please use one or both of --concatenate' +
+                         ' or --extract')
 
     if args.outdir:
         if not args.concatenate:
-            parser.error('Please use --concatenate to use the --outdir option')
+            parser.error('Please use --concatenate' +
+                         ' to use the --outdir option')
 
     if args.dir:
         if not args.extract:
@@ -83,7 +89,8 @@ def get_args():
 
     if args.extract:
         if not args.dir:
-            parser.error('Please specify where to copy the extracted files with --dir')
+            parser.error('Please specify where to copy' +
+                         ' the extracted files with --dir')
 
     return args
 
@@ -98,7 +105,9 @@ def main():
         if not os.path.isdir(args.outdir):
             os.mkdir(args.outdir)
         elif not args.silent:
-            cont = input(f'Warning: The directory "{args.outdir}" already exists! Are you sure you want to continue (y/n)?')
+            cont = input(f'Warning: The directory "{args.outdir}"' +
+                         ' already exists!' +
+                         ' Are you sure you want to continue (y/n)?')
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
 
@@ -106,13 +115,16 @@ def main():
         if not os.path.isdir(args.dir):
             os.mkdir(args.dir)
         elif not args.silent:
-            cont = input(f'Warning: The directory "{args.dir}" already exists! Are you sure you want to continue (y/n)?')
+            cont = input(f'Warning: The directory "{args.dir}"' +
+                         ' already exists!' +
+                         ' Are you sure you want to continue (y/n)?')
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
 
     if args.concatenate and not args.silent:
         if not args.outdir:
-            cont = input('Warning: Are you sure you want to write output to the current directory (y/n)?')
+            cont = input('Warning: Are you sure you want to write' +
+                         ' output to the current directory (y/n)?')
             if cont == 'n':
                 sys.exit('Okay, see you next time!')
 
@@ -143,10 +155,9 @@ def main():
         for rep in reps:
             if filename and direction in rep:
                 # print(name, rep) # inspect pairing
-                # add in if os.path.isfile to be able to generate error messages
                 fh1 = open(name).read()
                 fh2 = open(rep).read()
-                #gz going to need special handling here, right???
+                # gz going to need special handling here, right???
                 if args.concatenate:
                     if args.outdir:
                         outfile = ''.join(args.outdir + '/' + basename)
@@ -161,7 +172,8 @@ def main():
                 if args.extract:
                     if args.dir:
                         original_file = ''.join(args.dir + '/' + basename)
-                        rep_file = ''.join(args.dir + '/' + os.path.basename(rep))
+                        rep_file = ''.join(args.dir + '/' +
+                                           os.path.basename(rep))
                     else:
                         original_file = basename
                         rep_file = os.path.basename(rep)
@@ -171,9 +183,6 @@ def main():
                         fh.write(fh2 + '\n')
 
 # gz/actual fq files
-# push test data/expected outputs
-# Makefile with test and how to run
-# reqs?
 # FH.name to save mem?
 # Typing info?
 
