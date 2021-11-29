@@ -2,6 +2,7 @@
 
 import os
 import re
+import gzip
 from subprocess import getstatusoutput
 from shutil import rmtree
 
@@ -196,7 +197,7 @@ def test_fqs_extract():
         rmtree('outdir')
 
 
-# # -------------------------------------------------
+# -------------------------------------------------
 def test_fqs_concat_extract():
     """ Program concatenates and extracts replicate files """
 
@@ -288,5 +289,47 @@ def test_fqs_concat_extract():
                                                'TTAA',
                                                '+',
                                                '::::'])
+    if os.path.isdir('exdir'):
+        rmtree('exdir')
+
+
+# -------------------------------------------------
+def test_gz_concat_extract():
+    """ Program concatenates and extracts gzipped replicate files """
+
+    rv, out = getstatusoutput(f'{PRG} _WR -f inputs/*.gz -co catdir -ed exdir')
+    assert rv == 0
+    assert out == ''
+    assert os.path.isdir('catdir')
+    assert os.path.isfile('catdir/ind_1.1.fq.gz')
+    assert os.path.isfile('catdir/ind_1.2.fq.gz')
+    with gzip.open('catdir/ind_1.1.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_concat/ind_1.1.fq.gz', 'rt').read()
+    with gzip.open('catdir/ind_1.2.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_concat/ind_1.2.fq.gz', 'rt').read()
+
+    if os.path.isdir('catdir'):
+        rmtree('catdir')
+
+    assert os.path.isdir('exdir')
+    assert os.path.isfile('exdir/ind_1.1.fq.gz')
+    assert os.path.isfile('exdir/ind_1_WR.1.fq.gz')
+    assert os.path.isfile('exdir/ind_1.2.fq.gz')
+    assert os.path.isfile('exdir/ind_1_WR.2.fq.gz')
+    with gzip.open('exdir/ind_1.1.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_extract/ind_1.1.fq.gz', 'rt').read()
+    with gzip.open('exdir/ind_1_WR.1.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_extract/ind_1_WR.1.fq.gz', 'rt').read()
+    with gzip.open('exdir/ind_1.2.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_extract/ind_1.2.fq.gz', 'rt').read()
+    with gzip.open('exdir/ind_1_WR.2.fq.gz', 'rt') as fh:
+        assert fh.read() == \
+               gzip.open('expected/gz_extract/ind_1_WR.2.fq.gz', 'rt').read()
+
     if os.path.isdir('exdir'):
         rmtree('exdir')
