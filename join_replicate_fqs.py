@@ -159,7 +159,7 @@ def main():
                     # print(name, rep) # inspect pairing
                     fh1 = open(name).read()
                     fh2 = open(rep).read()
-                    # gz going to need special handling here, right???
+
                     if args.concatenate:
                         if args.outdir:
                             outfile = ''.join(args.outdir + '/' + basename)
@@ -187,7 +187,7 @@ def main():
                     # print(name, rep) # inspect pairing
                     fh1 = gzip.open(name, 'rt').read()
                     fh2 = gzip.open(rep, 'rt').read()
-                    # gz going to need special handling here, right???
+
                     if args.concatenate:
                         if args.outdir:
                             outfile = ''.join(args.outdir + '/' + basename)
