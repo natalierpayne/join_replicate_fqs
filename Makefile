@@ -1,3 +1,6 @@
+install:
+	python3 -m pip install flake8 pylint
+
 test:
 	pytest -xv --pylint --flake8 test.py join_replicate_fqs.py
 
