@@ -36,7 +36,7 @@ optional arguments:
   -e, --extract         Extract replicate files (default: False)
   -s, --silent          Silence warnings (default: False)
   ```
-  The program takes two required arguments: one or more patterns denoting replicate files (for example, _WR for within-library replicates and _BR for between-library replicates) and input filenames. The program will search among all provided input files for replicate files and the matching original files. For example, the following sample files (both as .fq and .fq.gz) are available in the inputs/ directory. The sample ind_1 was replicated, indicated by _WR, but the sample ind_2 was not. '.1' and '.2' indicate read direction.
+  The program takes two required arguments: one or more patterns denoting replicate files (for example, _WR for within-library replicates and _BR for between-library replicates) and input filenames. The program will search among all provided input files for replicate files and the matching original files. For example, the following sample files (both as .fq and .fq.gz) are available in the inputs/ directory. The sample ind_1 was replicated, indicated by _WR, but the sample ind_2 was not. '.1' and '.2' indicate read direction. The program expects a similar file naming convention (sample_name.direction.fq).
   ```
   $ ls inputs/*.fq
 inputs/ind_1.1.fq  inputs/ind_1.2.fq  inputs/ind_1_WR.1.fq  inputs/ind_1_WR.2.fq  inputs/ind_2.1.fq  inputs/ind_2.2.fq
