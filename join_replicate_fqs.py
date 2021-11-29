@@ -30,7 +30,7 @@ def get_args():
 
     parser.add_argument('-f',
                         '--files',
-                        help='Input gzipped fastq file(s)',
+                        help='Input fq or fq.gz file(s)',
                         metavar='FILE',
                         type=str,
                         nargs='+',
