@@ -208,11 +208,6 @@ def main():
                         with gzip.open(rep_file, 'wt') as fh:
                             fh.write(fh2 + '\n')
 
-# FH.name to save mem?
-# Typing info?
-# exit message?
-# Readme!
-
 
 # --------------------------------------------------
 if __name__ == '__main__':
