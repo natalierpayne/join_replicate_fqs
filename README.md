@@ -12,7 +12,10 @@ To install the program, run the following:
 ```
 git clone https://github.com/natalierpayne/join_replicate_fqs.git
 ```
-The program relies on having Python 3 installed (written with Python 3.9.6), but no extra dependencies are required to run the program! Pylint and flake8 may be used when running the test suite, and THESE CAN BE INSTALLED WITH ______.
+The program relies on having Python 3 installed (written with Python 3.9.6), but no extra dependencies are required to run the program! Pylint and flake8 may be used when running the test suite, and these can be installed by running:
+```
+make install
+```
 
 ## Usage
 ```
