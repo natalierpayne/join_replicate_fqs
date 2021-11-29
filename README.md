@@ -142,6 +142,21 @@ TTAA
   gunzip concat_dir/*
   gunzip extract_dir/*
   ```
+  Additionally, the program is not limited to use with fastq-formatted files. More than one pattern denoting replicates can also be used.
+  ```
+  $ head sample_text.1.txt 
+    This is a sample.
+  $ head sample_text_BR.1.txt
+    This is a replicate!
+  $ head sample_text_WR.1.txt
+    This is another replicate!
+  $ ./join_replicate_fqs.py _WR _BR -f sample_text*.txt -co out
+  $ head out/sample_text.1.txt
+    This is a sample.
+    This is a replicate!
+    This is another replicate!
+  
+  ```
   
   ## Testing
   A passing test suite should look like this:
