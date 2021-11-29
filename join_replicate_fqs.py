@@ -9,8 +9,9 @@ import argparse
 import os
 import sys
 import re
+import gzip
 
-# pylint:disable=too-many-locals,consider-using-with,unspecified-encoding,too-many-branches,too-many-statements
+# pylint:disable=too-many-nested-blocks,too-many-locals,consider-using-with,unspecified-encoding,too-many-branches,too-many-statements
 
 
 # --------------------------------------------------
@@ -150,37 +151,67 @@ def main():
 
     for name in set(rep_sample_names):
         basename = os.path.basename(name)
-        root, _ext = os.path.splitext(basename)
-        filename, direction = os.path.splitext(root)
-        for rep in reps:
-            if filename and direction in rep:
-                # print(name, rep) # inspect pairing
-                fh1 = open(name).read()
-                fh2 = open(rep).read()
-                # gz going to need special handling here, right???
-                if args.concatenate:
-                    if args.outdir:
-                        outfile = ''.join(args.outdir + '/' + basename)
-                    else:
-                        outfile = basename
-                    if not os.path.isfile(outfile):
-                        with open(outfile, 'wt', encoding='utf8') as fh:
+        root, ext = os.path.splitext(basename)
+        if ext != '.gz':
+            filename, direction = os.path.splitext(root)
+            for rep in reps:
+                if filename and direction in rep:
+                    # print(name, rep) # inspect pairing
+                    fh1 = open(name).read()
+                    fh2 = open(rep).read()
+                    # gz going to need special handling here, right???
+                    if args.concatenate:
+                        if args.outdir:
+                            outfile = ''.join(args.outdir + '/' + basename)
+                        else:
+                            outfile = basename
+                        if not os.path.isfile(outfile):
+                            with open(outfile, 'wt', encoding='utf8') as fh:
+                                fh.write(fh1 + '\n')
+                        with open(outfile, 'at', encoding='utf8') as fh:
+                            fh.write(fh2 + '\n')
+
+                    if args.extract:
+                        original_file = ''.join(args.dir + '/' + basename)
+                        rep_file = ''.join(args.dir + '/' +
+                                           os.path.basename(rep))
+                        with open(original_file, 'wt', encoding='utf8') as fh:
                             fh.write(fh1 + '\n')
-                    with open(outfile, 'at', encoding='utf8') as fh:
-                        fh.write(fh2 + '\n')
+                        with open(rep_file, 'wt', encoding='utf8') as fh:
+                            fh.write(fh2 + '\n')
+        else:
+            root, ext = os.path.splitext(root)
+            filename, direction = os.path.splitext(root)
+            for rep in reps:
+                if filename and direction in rep:
+                    # print(name, rep) # inspect pairing
+                    fh1 = gzip.open(name, 'rt').read()
+                    fh2 = gzip.open(rep, 'rt').read()
+                    # gz going to need special handling here, right???
+                    if args.concatenate:
+                        if args.outdir:
+                            outfile = ''.join(args.outdir + '/' + basename)
+                        else:
+                            outfile = basename
+                        if not os.path.isfile(outfile):
+                            with gzip.open(outfile, 'wt') as fh:
+                                fh.write(fh1 + '\n')
+                        with gzip.open(outfile, 'at') as fh:
+                            fh.write(fh2 + '\n')
 
-                if args.extract:
-                    original_file = ''.join(args.dir + '/' + basename)
-                    rep_file = ''.join(args.dir + '/' +
-                                       os.path.basename(rep))
-                    with open(original_file, 'wt', encoding='utf8') as fh:
-                        fh.write(fh1 + '\n')
-                    with open(rep_file, 'wt', encoding='utf8') as fh:
-                        fh.write(fh2 + '\n')
+                    if args.extract:
+                        original_file = ''.join(args.dir + '/' + basename)
+                        rep_file = ''.join(args.dir + '/' +
+                                           os.path.basename(rep))
+                        with gzip.open(original_file, 'wt') as fh:
+                            fh.write(fh1 + '\n')
+                        with gzip.open(rep_file, 'wt') as fh:
+                            fh.write(fh2 + '\n')
 
-# gz
 # FH.name to save mem?
 # Typing info?
+# exit message?
+# Readme!
 
 
 # --------------------------------------------------
