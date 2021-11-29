@@ -8,6 +8,8 @@ from shutil import rmtree
 
 PRG = './join_replicate_fqs.py'
 
+# pylint:disable=consider-using-with,unspecified-encoding
+
 
 # --------------------------------------------------
 def test_exists():
@@ -103,40 +105,9 @@ def test_fqs_concat():
     assert os.path.isfile('outdir/ind_1.1.fq')
     assert os.path.isfile('outdir/ind_1.2.fq')
     with open('outdir/ind_1.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2',
-                                               'TTTT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_1',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read() == open('expected/concat/ind_1.1.fq').read()
     with open('outdir/ind_1.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1_REV',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2_REV',
-                                               'TTTT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_1_REV',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2_REV',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
+        assert fh.read() == open('expected/concat/ind_1.2.fq').read()
     if os.path.isdir('outdir'):
         rmtree('outdir')
 
@@ -155,44 +126,17 @@ def test_fqs_extract():
     assert os.path.isfile('outdir/ind_1.2.fq')
     assert os.path.isfile('outdir/ind_1_WR.2.fq')
     with open('outdir/ind_1.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2',
-                                               'TTTT',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1.1.fq').read().strip()
     with open('outdir/ind_1_WR.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_WR_SEQ_1',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1_WR.1.fq').read().strip()
     with open('outdir/ind_1.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1_REV',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2_REV',
-                                               'TTTT',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1.2.fq').read().strip()
     with open('outdir/ind_1_WR.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_WR_SEQ_1_REV',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2_REV',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1_WR.2.fq').read().strip()
     if os.path.isdir('outdir'):
         rmtree('outdir')
 
@@ -208,40 +152,9 @@ def test_fqs_concat_extract():
     assert os.path.isfile('catdir/ind_1.1.fq')
     assert os.path.isfile('catdir/ind_1.2.fq')
     with open('catdir/ind_1.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2',
-                                               'TTTT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_1',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read() == open('expected/concat/ind_1.1.fq').read()
     with open('catdir/ind_1.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1_REV',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2_REV',
-                                               'TTTT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_1_REV',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2_REV',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
+        assert fh.read() == open('expected/concat/ind_1.2.fq').read()
     if os.path.isdir('catdir'):
         rmtree('catdir')
 
@@ -251,44 +164,17 @@ def test_fqs_concat_extract():
     assert os.path.isfile('exdir/ind_1.2.fq')
     assert os.path.isfile('exdir/ind_1_WR.2.fq')
     with open('exdir/ind_1.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2',
-                                               'TTTT',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1.1.fq').read().strip()
     with open('exdir/ind_1_WR.1.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_WR_SEQ_1',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1_WR.1.fq').read().strip()
     with open('exdir/ind_1.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_SEQ_1_REV',
-                                               'AAAA',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_SEQ_2_REV',
-                                               'TTTT',
-                                               '+',
-                                               '::::'])
-
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1.2.fq').read().strip()
     with open('exdir/ind_1_WR.2.fq', encoding='utf-8') as fh:
-        assert fh.read().strip() == '\n'.join(['@IND_1_WR_SEQ_1_REV',
-                                               'AATT',
-                                               '+',
-                                               '::::',
-                                               '@IND_1_WR_SEQ_2_REV',
-                                               'TTAA',
-                                               '+',
-                                               '::::'])
+        assert fh.read().strip() == \
+               open('expected/extract/ind_1_WR.2.fq').read().strip()
     if os.path.isdir('exdir'):
         rmtree('exdir')
 
